@@ -27,7 +27,7 @@ namespace E_Motion
 
         public MainWindow()
         {
-            InitializeComponent();          
+            InitializeComponent();
         }
 
         public SimulationController Controller
@@ -51,6 +51,15 @@ namespace E_Motion
         private void MotionCanavas_Loaded(object sender, RoutedEventArgs e)
         {
             this._controller = new SimulationController(ref this.MotionCanavas);
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (this._controller != null)
+            {
+                this._controller.Simulation.MaxVerticalSize = (int)this.MotionCanavas.ActualHeight;
+                this._controller.Simulation.MaxVerticalSize = (int)this.MotionCanavas.ActualHeight;
+            }
         }
     }
 }

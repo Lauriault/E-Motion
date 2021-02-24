@@ -1,20 +1,23 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Timers;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace E_Motion.Models
 {
     public class Simulation
     {
         private List<Point> _heatPoints;
-        private List<Dot> _dots;
+        private SynchronizedCollection<Dot> _dots;
+        private Stopwatch sw;
+
         private Random _random;
-        private Timer _timer;
+        private DispatcherTimer _timer;
 
 
         /// <summary>
@@ -29,12 +32,14 @@ namespace E_Motion.Models
         /// <param name="pLifespanVariation">The lifespan variation of the dots in ms</param>
         public Simulation(int pMaxX, int pMaxY, int pMaxDotCount ,Color pColor, int pDotSize, int pDotSizeVariation, int pLifespan, int pLifespanVariation)
         {
-            this.Dots = new List<Dot>();
+            this._dots = new SynchronizedCollection<Dot>();
             this._heatPoints = new List<Point>();
             this._random = new Random();
-            this._timer = new Timer(100);
-            this._timer.Elapsed += _timer_Elapsed;
-            
+            this._timer = new DispatcherTimer();
+            this._timer.Interval = new TimeSpan(0,0,0,0,10);
+            this._timer.Tick += _timer_Tick;
+            this.sw = new Stopwatch();
+
 
             this.SimulationStatus = false;
             this.MaxHorizontalSize = pMaxX;
@@ -49,7 +54,7 @@ namespace E_Motion.Models
             this.NormalLifeSpan = pLifespan;
         }
 
-        private void _timer_Elapsed(object sender, ElapsedEventArgs e)
+        private void _timer_Tick(object sender, EventArgs e)
         {
             this.GenerateDots();
         }
@@ -66,23 +71,26 @@ namespace E_Motion.Models
 
         private void CleanUpDots()
         {
-            for (int i = 0; i < this.Dots.Count; i++)
+            
+            for (int i = this._dots.Count - 1; i > 0; i--)
             {
-                if (!this.Dots[i].PointIsValid)
-                    this.Dots.Remove(this.Dots[i]);
+                if (!this._dots.ElementAt(i).PointIsValid)
+                    this._dots.RemoveAt(i);
             }
+            
         }
 
         private void GenerateDots()
         {
-            //this._timer.Stop();
             this.CleanUpDots();
-            while (this.Dots.Count < (this.MaxDotCount))
+
+            for (int i = 0; i < (this.MaxDotCount - this._dots.Count) ; i++)
             {
                 int lifespan = this._random.Next(this.NormalLifeSpan - this.LifeSpanDelta, this.NormalLifeSpan + 1);
                 int size = this._random.Next(this.NormalSize - this.SizeDeltaVariation, this.NormalSize + 1);
-                this.Dots.Add(new Dot(lifespan, size, this.GetRandomCoordinates()));
-            }          
+                this._dots.Add(new Dot(lifespan, size, this.GetRandomCoordinates()));
+            }
+
             this.OnDotAreGenerated(new EventArgs());
         }
 
@@ -102,11 +110,11 @@ namespace E_Motion.Models
             this._timer.Start();
         }
 
-        public void ContinueSimulation() => Console.WriteLine("Yep"); /*this._timer.Start();*/
+        //public void ContinueSimulation() => Console.WriteLine("Yep"); /*this._timer.Start();*/
 
         private Point GetRandomCoordinates() => new Point(_random.Next(0, (this.MaxHorizontalSize - this.NormalSize) + 1), _random.Next(0, (this.MaxVerticalSize - this.NormalSize) + 1));
 
-        public List<Dot> Dots { get => new List<Dot>(this._dots); private set => this._dots = value; }
+        public SynchronizedCollection<Dot> Dots { get => this._dots;}
 
         public bool SimulationStatus { get; private set; }
 

@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen" 
         WindowState="Maximized"
+        SizeChanged="Window_SizeChanged"
+        MinHeight="400"
+        MinWidth="800"
         Title="E-Motion configurator">
     <Grid>
         <Grid.ColumnDefinitions>
