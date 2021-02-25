@@ -17,10 +17,10 @@ namespace E_Motion.Models
                 return DateTime.Compare(DateTime.Now,this.PassDate) <=0;
             }
         }
-        public int Size { get; set; }
+        public double Size { get; set; }
         public DateTime PassDate { get; private set; }
 
-        public Dot(int pLifespan, int pSize, Point pPoint)
+        public Dot(int pLifespan, double pSize, Point pPoint)
         {
             this.PassDate = DateTime.Now.AddMilliseconds(pLifespan);
             this.Size = pSize;

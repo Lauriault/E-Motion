@@ -18,6 +18,8 @@ namespace E_Motion.Controllers
     {
         private Canvas _canvas;
         private Stopwatch _sw;
+        private Brush _brush;
+        private Pen _pen;
 
         public Simulation Simulation { get; set; }
 
@@ -28,11 +30,11 @@ namespace E_Motion.Controllers
         public SimulationController(ref Canvas pCanvas)
         {
             this._sw = new Stopwatch();
-            
             this._canvas = pCanvas;
-            this.Simulation = new Simulation((int)pCanvas.ActualWidth, (int)pCanvas.ActualHeight, 6500, Color.FromRgb(255, 0, 0), 3, 0, 400, 370);
+            this.Simulation = new Simulation(2000, Color.FromRgb(255, 0, 0), 2, 0, 400, 370, 0);
             this.Simulation.DotAreGenerated += Simulation_DotAreGenerated;
-            this.Start();
+            this._brush = new SolidColorBrush(this.Simulation.DotColor);
+            this._pen = new Pen(this._brush, 1);
         }
 
         private void Simulation_DotAreGenerated(object sender, EventArgs e) => this.Draw();
@@ -53,15 +55,21 @@ namespace E_Motion.Controllers
             this._canvas.Children.Clear();
 
             foreach (var dot in this.Simulation.Dots)
-                drawingContext.DrawEllipse(new SolidColorBrush(this.Simulation.DotColor), null, dot.Coordinate, dot.Size/2, dot.Size/2);
+                drawingContext.DrawEllipse(new SolidColorBrush(this.Simulation.DotColor), null, dot.Coordinate, dot.Size / 2, dot.Size / 2);
 
             this._canvas.Children.Add(new VisualHost { Visual = drawingVisual });
 
             // Persist the drawing content.
             drawingContext.Close();
             this._sw.Stop();
+            this.RenderTime = (int)this._sw.ElapsedMilliseconds;
             Console.WriteLine($"Elapsed time while rendering { this._sw.ElapsedMilliseconds}");
             this._sw.Reset();
+        }
+
+        public int RenderTime 
+        {
+            get;private set;
         }
 
         public void Pause() { }

@@ -28,18 +28,14 @@ namespace E_Motion
         public MainWindow()
         {
             InitializeComponent();
+            this._controller = new SimulationController(ref this.MotionCanavas);
+            this.DataContext = this._controller;
         }
 
         public SimulationController Controller
         {
             get => this._controller;
             set => this._controller = value;
-        }
-
-        public int DotSize
-        {
-            get => this._controller.Simulation.NormalSize;
-            set => this._controller.Simulation.NormalSize = value;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -50,7 +46,7 @@ namespace E_Motion
 
         private void MotionCanavas_Loaded(object sender, RoutedEventArgs e)
         {
-            this._controller = new SimulationController(ref this.MotionCanavas);
+
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -59,6 +55,32 @@ namespace E_Motion
             {
                 this._controller.Simulation.MaxVerticalSize = (int)this.MotionCanavas.ActualHeight;
                 this._controller.Simulation.MaxVerticalSize = (int)this.MotionCanavas.ActualHeight;
+            }
+        }
+
+        private void StartButton_Click(object sender, RoutedEventArgs e)
+        {
+            this._controller.Simulation.MaxHorizontalSize = (int)this.MotionCanavas.ActualWidth;
+            this._controller.Simulation.MaxVerticalSize = (int)this.MotionCanavas.ActualHeight;
+            this._controller.Start();
+        }
+
+        private void DotSizeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (this.DotSizeDeltaSlider != null)
+            {
+                this.DotSizeDeltaSlider.Minimum = 0;
+                this.DotSizeDeltaSlider.Maximum = this.DotSizeSlider.Value - 0.1;
+            }
+        }
+
+        private void DotLifeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (this.DotLifeSlider != null)
+            {
+                this._controller.Simulation.Reset();
+                this.DotLifeDeltaSlider.Minimum = 0;
+                this.DotLifeDeltaSlider.Maximum = this.DotLifeSlider.Value-1;
             }
         }
     }

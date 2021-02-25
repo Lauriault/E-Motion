@@ -32,7 +32,7 @@ namespace E_Motion.Models
         /// <param name="pDotSizeVariation">The delta variation of the dots in pixel</param>
         /// <param name="pLifespan">The lifespan of the dots in ms</param>
         /// <param name="pLifespanVariation">The lifespan variation of the dots in ms</param>
-        public Simulation(int pMaxX, int pMaxY, int pMaxDotCount, Color pColor, int pDotSize, int pDotSizeVariation, int pLifespan, int pLifespanVariation)
+        public Simulation(int pMaxDotCount, Color pColor, int pDotSize, int pDotSizeVariation, int pLifespan, int pLifespanVariation, double pConcentrationFactor)
         {
             this._dots = new SynchronizedCollection<Dot>();
             this._heatPoints = new List<Point>();
@@ -44,11 +44,11 @@ namespace E_Motion.Models
             this._timer.Tick += _timer_Tick;
             this.sw = new Stopwatch();
             this.pointsService = new PointsService();
-
+            this.ConcentrationFactor = pConcentrationFactor;
 
             this.SimulationStatus = false;
-            this.MaxHorizontalSize = pMaxX;
-            this.MaxVerticalSize = pMaxY;
+            //this.MaxHorizontalSize = pMaxX;
+            //this.MaxVerticalSize = pMaxY;
             this.MaxDotCount = pMaxDotCount;
             this.DotColor = pColor;
 
@@ -59,10 +59,7 @@ namespace E_Motion.Models
             this.NormalLifeSpan = pLifespan;
         }
 
-        private void _timer_Tick(object sender, EventArgs e)
-        {
-            this.GenerateDots();
-        }
+        private void _timer_Tick(object sender, EventArgs e) => this.GenerateDots();
 
         public event EventHandler<EventArgs> DotAreGenerated;
 
@@ -73,16 +70,18 @@ namespace E_Motion.Models
                 handler(this, e);
         }
 
+        public void Reset()
+        {
+            this._dots.Clear();
+        }
 
         private void CleanUpDots()
         {
-
             for (int i = this._dots.Count - 1; i > 0; i--)
             {
                 if (!this._dots.ElementAt(i).PointIsValid)
                     this._dots.RemoveAt(i);
             }
-
         }
 
         private void GenerateDots()
@@ -92,8 +91,8 @@ namespace E_Motion.Models
             for (int i = 0; i < (this.MaxDotCount - this._dots.Count); i++)
             {
                 int lifespan = this._random.Next(this.NormalLifeSpan - this.LifeSpanDelta, this.NormalLifeSpan + 1);
-                int size = this._random.Next(this.NormalSize - this.SizeDeltaVariation, this.NormalSize + 1);
-                this._dots.Add(new Dot(lifespan, size, this.pointsService.GetNewPoint(this.MaxHorizontalSize,this.MaxVerticalSize,this._heatPoints,this.NormalSize)));
+                double size = this._random.NextDouble()*((this.NormalSize + 1)-(this.NormalSize - this.SizeDeltaVariation))+(this.NormalSize - this.SizeDeltaVariation);
+                this._dots.Add(new Dot(lifespan, size, this.pointsService.GetNewPoint(this.MaxHorizontalSize,this.MaxVerticalSize,this._heatPoints,this.NormalSize, this.ConcentrationFactor)));
             }
 
             this.OnDotAreGenerated(new EventArgs());
@@ -115,10 +114,6 @@ namespace E_Motion.Models
             this._timer.Start();
         }
 
-        //public void ContinueSimulation() => Console.WriteLine("Yep"); /*this._timer.Start();*/
-
-        
-        
         public SynchronizedCollection<Dot> Dots { get => this._dots; }
 
         public bool SimulationStatus { get; private set; }
@@ -136,12 +131,12 @@ namespace E_Motion.Models
         /// <summary>
         /// Gets and sets the normal dot size
         /// </summary>
-        public int NormalSize { get; set; }
+        public double NormalSize { get; set; }
 
         /// <summary>
         /// Gets and sets the size variation of the dots
         /// </summary>
-        public int SizeDeltaVariation { get; set; }
+        public double SizeDeltaVariation { get; set; }
 
         /// <summary>
         /// Gets and sets the max vertical canvas size
@@ -162,6 +157,11 @@ namespace E_Motion.Models
         /// Gets and sets the lifespan variation
         /// </summary>
         public int LifeSpanDelta { get; set; }
+
+        /// <summary>
+        /// Specifies the way the heat points concentrate dots
+        /// </summary>
+        public double ConcentrationFactor { get; set; }
 
     }
 }
