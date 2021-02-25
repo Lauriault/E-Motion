@@ -1,6 +1,7 @@
 ﻿using E_Motion.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -16,6 +17,7 @@ namespace E_Motion.Controllers
     public class SimulationController
     {
         private Canvas _canvas;
+        private Stopwatch _sw;
 
         public Simulation Simulation { get; set; }
 
@@ -25,8 +27,10 @@ namespace E_Motion.Controllers
         /// </summary>
         public SimulationController(ref Canvas pCanvas)
         {
+            this._sw = new Stopwatch();
+            
             this._canvas = pCanvas;
-            this.Simulation = new Simulation((int)pCanvas.ActualWidth, (int)pCanvas.ActualHeight, 3500, Color.FromRgb(255, 0, 0), 3, 0, 400, 200);
+            this.Simulation = new Simulation((int)pCanvas.ActualWidth, (int)pCanvas.ActualHeight, 6500, Color.FromRgb(255, 0, 0), 3, 0, 400, 370);
             this.Simulation.DotAreGenerated += Simulation_DotAreGenerated;
             this.Start();
         }
@@ -40,6 +44,7 @@ namespace E_Motion.Controllers
 
         public void Draw()
         {
+            this._sw.Start();
             DrawingVisual drawingVisual = new DrawingVisual();
 
             // Retrieve the DrawingContext in order to create new drawing content.
@@ -54,6 +59,9 @@ namespace E_Motion.Controllers
 
             // Persist the drawing content.
             drawingContext.Close();
+            this._sw.Stop();
+            Console.WriteLine($"Elapsed time while rendering { this._sw.ElapsedMilliseconds}");
+            this._sw.Reset();
         }
 
         public void Pause() { }
