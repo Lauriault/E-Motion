@@ -27,7 +27,7 @@
                 <RowDefinition Height="70"/>
                 <RowDefinition Height="70"/>
                 <RowDefinition Height="70"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="40"/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -63,7 +63,7 @@
             <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="7" MaxHeight="18" Text="{Binding Path=Simulation.ConcentrationFactor, Mode=TwoWay}" MaxWidth="35"></TextBox>
 
             <Label HorizontalAlignment="Center" FontWeight="Bold" Grid.Row="8" Margin="10 0 10 10">Couleur des points</Label>
-            <xctk1:ColorPicker Name="cp" Grid.Column="1" Grid.Row="8" DisplayColorAndName="True" AvailableColorsSortingMode="HueSaturationBrightness" ></xctk1:ColorPicker>
+            <xctk1:ColorPicker Name="cp" Grid.Column="1" Grid.Row="8" SelectedColorChanged="cp_SelectedColorChanged" Loaded="cp_Loaded" DisplayColorAndName="True"  AvailableColorsSortingMode="HueSaturationBrightness" ></xctk1:ColorPicker>
 
             
             <Grid Grid.Row="9" Grid.ColumnSpan="2">
@@ -78,6 +78,6 @@
             
         </Grid>
 
-        <Canvas Name="MotionCanavas" Grid.Column="1" Loaded="MotionCanavas_Loaded" Background="Black"></Canvas>
+        <Canvas MouseDown="MotionCanavas_MouseDown" Name="MotionCanavas" Grid.Column="1" Loaded="MotionCanavas_Loaded" Background="Black"></Canvas>
     </Grid>
 </Window>

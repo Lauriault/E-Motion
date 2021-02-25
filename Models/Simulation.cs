@@ -36,8 +36,6 @@ namespace E_Motion.Models
         {
             this._dots = new SynchronizedCollection<Dot>();
             this._heatPoints = new List<Point>();
-            this._heatPoints.Add(new Point(800, 200));
-            this._heatPoints.Add(new Point(800, 800));
             this._random = new Random();
             this._timer = new DispatcherTimer();
             this._timer.Interval = new TimeSpan(0, 0, 0, 0, 10);
@@ -104,7 +102,7 @@ namespace E_Motion.Models
         /// <param name="pPoint"></param>
         public void AddHeatpoint(Point pPoint)
         {
-            throw new NotImplementedException();
+            this._heatPoints.Add(pPoint);
         }
 
         public void StartSimulation()

@@ -83,5 +83,23 @@ namespace E_Motion
                 this.DotLifeDeltaSlider.Maximum = this.DotLifeSlider.Value-1;
             }
         }
+
+        private void cp_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
+        {
+            if (this.cp != null)
+            {
+                this._controller.Simulation.DotColor = e.NewValue.Value;
+            }
+        }
+
+        private void cp_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.cp.SelectedColor = this._controller.Simulation.DotColor;
+        }
+
+        private void MotionCanavas_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            this._controller.Simulation.AddHeatpoint(e.GetPosition(this.MotionCanavas));
+        }
     }
 }
