@@ -107,9 +107,16 @@ namespace E_Motion.Models
 
         public void StartSimulation()
         {
+            this._dots.Clear();
             this.SimulationStatus = true;
             this.GenerateDots();
             this._timer.Start();
+        }
+
+        public void StopSimulation()
+        {
+            this.SimulationStatus = false;
+            this._timer.Stop();
         }
 
         public SynchronizedCollection<Dot> Dots { get => this._dots; }

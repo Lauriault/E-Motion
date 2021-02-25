@@ -60,9 +60,19 @@ namespace E_Motion
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            this._controller.Simulation.MaxHorizontalSize = (int)this.MotionCanavas.ActualWidth;
-            this._controller.Simulation.MaxVerticalSize = (int)this.MotionCanavas.ActualHeight;
-            this._controller.Start();
+            if (!this._controller.IsRunning)
+            {
+                this._controller.Simulation.MaxHorizontalSize = (int)this.MotionCanavas.ActualWidth;
+                this._controller.Simulation.MaxVerticalSize = (int)this.MotionCanavas.ActualHeight;
+                this._controller.Start();
+                this.StartButton.Content = "Arrêter";
+            }
+            else
+            {
+                this._controller.Stop();
+                this.StartButton.Content = "Démarrer";
+            }
+            
         }
 
         private void DotSizeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -76,11 +86,11 @@ namespace E_Motion
 
         private void DotLifeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (this.DotLifeSlider != null)
+            if (this.DotLifeSlider != null && this.DotLifeDeltaSlider != null)
             {
                 this._controller.Simulation.Reset();
                 this.DotLifeDeltaSlider.Minimum = 0;
-                this.DotLifeDeltaSlider.Maximum = this.DotLifeSlider.Value-1;
+                this.DotLifeDeltaSlider.Maximum = this.DotLifeSlider.Value-50;
             }
         }
 

@@ -31,7 +31,7 @@ namespace E_Motion.Controllers
         {
             this._sw = new Stopwatch();
             this._canvas = pCanvas;
-            this.Simulation = new Simulation(2000, Color.FromRgb(255, 0, 0), 2, 0, 400, 370, 0);
+            this.Simulation = new Simulation(5000, Color.FromRgb(255, 0, 0), 2, 0, 280, 140, 0);
             this.Simulation.DotAreGenerated += Simulation_DotAreGenerated;
             this._brush = new SolidColorBrush(this.Simulation.DotColor);
             this._pen = new Pen(this._brush, 1);
@@ -41,8 +41,11 @@ namespace E_Motion.Controllers
 
         public void Start()
         {
+            this.IsRunning = true;
             this.Simulation.StartSimulation();
         }
+
+        public bool IsRunning { get; private set; }
 
         public void Draw()
         {
@@ -63,7 +66,6 @@ namespace E_Motion.Controllers
             drawingContext.Close();
             this._sw.Stop();
             this.RenderTime = (int)this._sw.ElapsedMilliseconds;
-            Console.WriteLine($"Elapsed time while rendering { this._sw.ElapsedMilliseconds}");
             this._sw.Reset();
         }
 
@@ -72,8 +74,10 @@ namespace E_Motion.Controllers
             get;private set;
         }
 
-        public void Pause() { }
-
-        public void Restart() { }
+        public void Stop() 
+        {
+            this.IsRunning = false;
+            this.Simulation.StopSimulation();
+        }
     }
 }

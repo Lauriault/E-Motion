@@ -47,15 +47,15 @@
             <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="3" MaxHeight="18" Text="{Binding Path=Simulation.SizeDeltaVariation, Mode=TwoWay}" MaxWidth="35"></TextBox>
 
             <Label HorizontalAlignment="Center" FontWeight="Bold" Grid.Row="4" Margin="10 0 10 10">Quantité de points</Label>
-            <Slider Name="MaxDotCountSlider" Maximum="7500" Minimum="0" IsSnapToTickEnabled="True" Margin="20" Value="{Binding Path=Simulation.MaxDotCount,Mode=TwoWay}" Grid.Column="0" Grid.Row="4" Height="20" IsMoveToPointEnabled="True"/>
+            <Slider Name="MaxDotCountSlider" Maximum="10000" Minimum="0" IsSnapToTickEnabled="True" Margin="20" Value="{Binding Path=Simulation.MaxDotCount,Mode=TwoWay}" Grid.Column="0" Grid.Row="4" Height="20" IsMoveToPointEnabled="True"/>
             <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="4" MaxHeight="18" Text="{Binding Path=Simulation.MaxDotCount, Mode=TwoWay}" MaxWidth="35"></TextBox>
 
             <Label HorizontalAlignment="Center" FontWeight="Bold" Grid.Row="5" Margin="10 0 10 10">Durée de vie des points</Label>
-            <Slider ValueChanged="DotLifeSlider_ValueChanged" Name="DotLifeSlider" Maximum="10000" Minimum="0" IsSnapToTickEnabled="True" Margin="20" Value="{Binding Path=Simulation.NormalLifeSpan,Mode=TwoWay}" Grid.Column="0" Grid.Row="5" Height="20" IsMoveToPointEnabled="True"/>
+            <Slider ValueChanged="DotLifeSlider_ValueChanged" Name="DotLifeSlider" Maximum="2500" Minimum="50" IsSnapToTickEnabled="True" Margin="20" Value="{Binding Path=Simulation.NormalLifeSpan,Mode=TwoWay}" Grid.Column="0" Grid.Row="5" Height="20" IsMoveToPointEnabled="True"/>
             <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="5" MaxHeight="18" Text="{Binding Path=Simulation.NormalLifeSpan, Mode=TwoWay}" MaxWidth="35"></TextBox>
 
             <Label HorizontalAlignment="Center" FontWeight="Bold" Grid.Row="6" Margin="10 0 10 10">Variation de durée de vie</Label>
-            <Slider Name="DotLifeDeltaSlider" IsSnapToTickEnabled="True" Margin="20" Value="{Binding Path=Simulation.LifeSpanDelta,Mode=TwoWay}" Grid.Column="0" Grid.Row="6" Height="20" IsMoveToPointEnabled="True"/>
+            <Slider Name="DotLifeDeltaSlider" IsSnapToTickEnabled="True" Margin="20" Minimum="0" Value="{Binding Path=Simulation.LifeSpanDelta,Mode=TwoWay}" Grid.Column="0" Grid.Row="6" Height="20" IsMoveToPointEnabled="True"/>
             <TextBox IsReadOnly="True" Grid.Column="1" Grid.Row="6" MaxHeight="18" Text="{Binding Path=Simulation.LifeSpanDelta, Mode=TwoWay}" MaxWidth="35"></TextBox>
 
             <Label HorizontalAlignment="Center" FontWeight="Bold" Grid.Row="7" Margin="10 0 10 10">Facteur de concentration</Label>
@@ -71,7 +71,7 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Name="StartButton" Click="StartButton_Click" Margin="10">Démarrer</Button>
+                <Button Grid.ColumnSpan="2" Grid.Column="0" Name="StartButton" Click="StartButton_Click" Margin="10">Démarrer</Button>
                 <Button Visibility="Hidden" Grid.Column="1" Margin="10">Arrêter</Button>
             </Grid>
 
