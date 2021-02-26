@@ -68,8 +68,8 @@ namespace E_Motion.Services
         {
             double randomRadius = this._random.NextDouble() * ((pOutRadius + 1) - pInnerRadius) + pInnerRadius;
             int randomAngle = this._random.Next(0, 360);
-            double x = Math.Abs((pCenter.X + (randomRadius * Math.Cos((double)(randomAngle * Math.PI) / 180))));
-            double y = Math.Abs((pCenter.Y + (randomRadius * Math.Sin((double)(randomAngle * Math.PI) / 180))));
+            double x = Math.Abs(pCenter.X + (randomRadius * Math.Cos((double)(randomAngle * Math.PI) / 180)));
+            double y = Math.Abs(pCenter.Y + (randomRadius * Math.Sin((double)(randomAngle * Math.PI) / 180)));
             return new Point(x, y);
         }
     }

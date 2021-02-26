@@ -89,7 +89,7 @@ namespace E_Motion.Models
             for (int i = 0; i < (this.MaxDotCount - this._dots.Count); i++)
             {
                 int lifespan = this._random.Next(this.NormalLifeSpan - this.LifeSpanDelta, this.NormalLifeSpan + 1);
-                double size = this._random.NextDouble()*((this.NormalSize + 1)-(this.NormalSize - this.SizeDeltaVariation))+(this.NormalSize - this.SizeDeltaVariation);
+                double size = (new Random()).NextDouble()*((this.NormalSize+1)-(this.NormalSize - this.SizeDeltaVariation))+(this.NormalSize - this.SizeDeltaVariation);
                 this._dots.Add(new Dot(lifespan, size, this.pointsService.GetNewPoint(this.MaxHorizontalSize,this.MaxVerticalSize,this._heatPoints,this.NormalSize, this.ConcentrationFactor)));
             }
 
